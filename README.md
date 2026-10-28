@@ -1,0 +1,1 @@
+# opensearch-managed-by-aiven

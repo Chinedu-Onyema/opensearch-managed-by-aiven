@@ -1,0 +1,60 @@
+# fluent bit configuration file to connect to opensearch
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: logging
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush        5
+        Daemon       Off
+        Log_Level    info
+        Parsers_File parsers.conf
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/containers/*.log
+        Parser            docker
+        Tag               kube.*
+        Refresh_Interval  5
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Merge_Log           On
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude Off
+
+    [OUTPUT]
+        Name            opensearch
+        Match           *
+        Host            os-1794df53-onyemachinedu-45.l.aivencloud.com      
+        Port            12617
+        Index           fluentbit
+        HTTP_User       avnadmin
+        HTTP_Passwd     AVNS_lPNhS-GdsGfKuIZTKu3
+        TLS               On
+        TLS.verify        Off
+        Suppress_Type_Name On
+        Include_Tag_Key    On
+        Logstash_Format    On
+        Logstash_Prefix    kubernetes
+        Replace_Dots       On
+        Retry_Limit        False
+        # Add these parameters for OpenSearch compatibility
+        Write_Operation    create
+
+
+  parsers.conf: |
+    [PARSER]
+        Name        docker
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
+        Decode_Field_As   escaped_utf8 log do_next
+        Decode_Field_As   json log

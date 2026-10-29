@@ -1,0 +1,47 @@
+# fluent bit daemonset deployment
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluent-bit
+  namespace: logging
+  labels:
+    app: fluent-bit
+spec:
+  selector:
+    matchLabels:
+      app: fluent-bit
+  template:
+    metadata:
+      labels:
+        app: fluent-bit
+    spec:
+      serviceAccountName: fluent-bit                 # this service account allows fluentbit
+                                                     # the permissions to read logs generated from
+                                                     # the busybox application in the default namespace
+      containers:
+        - name: fluent-bit
+          image: fluent/fluent-bit:latest             # I am pulling the fluentbit latest 
+                                                      # docker image from docker hub
+                                                      # access image through the URL
+                                                      # https://hub.docker.com/r/fluent/fluent-bit
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+            - name: config
+              mountPath: /fluent-bit/etc/
+      volumes:
+        - name: varlog
+          hostPath:
+            path: /var/log
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers
+        - name: config
+          configMap:
+            name: fluent-bit-config                 # mount the fluentbit configmap created initially
+                                                    # on the fluentbit daemonset deployment to use 
+                                                    # the configurations and conncet to opensearch

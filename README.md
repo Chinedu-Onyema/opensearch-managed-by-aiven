@@ -9,9 +9,9 @@ When deploying production cloud infrastructure, organizations frequently leverag
 
 This phase details how to provision a managed OpenSearch cluster via Aiven, deploy a lightweight log-generating workload (busybox) in a Kubernetes cluster, configure Fluent Bit as a DaemonSet to tail container logs, securely ship logs to OpenSearch, and visualize application data using OpenSearch Dashboards.
 
-##### ACCESS PROJECT MATERIALS
-##### PDF GUIDE: [INTRODUCTION TO OPENSEARCH.pdf](https://github.com/user-attachments/files/34142587/INTRODUCTION.TO.OPENSEARCH.pdf)
-##### WATCH VIDEO WALKTHROUGH HERE: https://youtu.be/o8EfK4sEJbc
+#### ACCESS PROJECT MATERIALS
+#### PDF GUIDE: [INTRODUCTION TO OPENSEARCH.pdf](https://github.com/user-attachments/files/34142587/INTRODUCTION.TO.OPENSEARCH.pdf)
+#### WATCH VIDEO WALKTHROUGH HERE: https://youtu.be/o8EfK4sEJbc      
 
 
 ### STEP-BY-STEP DEPLOYMENT AND INTEGRATION GUIDE
